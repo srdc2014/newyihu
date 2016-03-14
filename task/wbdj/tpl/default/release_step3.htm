@@ -1,0 +1,57 @@
+{if $_K['map_api']=='baidu'}
+<script type="text/javascript" src="{$_K['baidu_api']}"></script>
+{else}
+<script type="text/javascript" src="{$_K['google_api']}"></script>
+{/if}
+<div class="prefix_1 suffix_1">
+    <h2 class="c333 mt_10">订单确认</h2>
+    <div class="list border_n" style="min-height:100px">
+         <form action="{$basic_url}" method="post" name="frm_step3" id="frm_step3">
+	  	 <div class="task_result">
+                            <h3 class="title">
+                                <strong>
+                                    <span class="cc00">{c:$release_info['txt_task_cash']}</span>
+                                    <span class="c333">{$release_info['txt_title']}</span>
+                                 </strong>
+                            </h3>
+                            <div class="detail">
+                                <p>
+                                    <span>{$model_info['model_name']}</span> |
+                                    <span>{$indus_arr[$release_info['indus_pid']]['indus_name']}-{$indus_arr[$release_info['indus_id']]['indus_name']}</span>
+                                </p>
+                                <div id="task_dec" class="task_dec ws_break">
+                                  <!--{eval echo htmlspecialchars_decode(strip_tags($release_info['tar_content']))}-->
+                                </div>
+                                <div class="show_more"><a href="#"><span class="arrow_b"></span></a></div>
+                            </div>
+                                
+                </div>  
+
+        <input type="hidden" name="formhash" value="{FORMHASH}">
+        <input type="hidden" name="ago_total" id="ago_total" value="$total_cash">
+            <div class="step_button t_r">
+                <ul>
+                    <li class="mb_10">托管赏金：<span class="cc00">{c:$release_info['txt_task_cash']}</span></li>
+                    <li class="mb_10"><input type="hidden" name="ago_total" id="ago_total" value="$total_cash">
+                        增值工具购买<span id="item_count">{$item_detail['item_count']}</span> 项，共<span class="cc33" id="item_cash">{c:$item_detail['item_cash']}</span> 
+                    </li>
+                    <li>
+                        {$_lang['pay_cash']}{$_lang['zh_mh']}
+                        <span class="font18 cc33" id="total">{c:$total_cash}</span>
+                        <font color="red" class="font18"></font>
+                        <button type="button" name="is_submit" onclick="return stepCheck();" class="big button">
+                            <span class="icon check"></span>
+                            {$_lang['confirm_release']}
+                        </button>
+                    </li>
+                </ul>
+                
+                
+            </div>
+        </form>
+    </div>
+  
+</div>
+
+ 
+<!--end 列表内容-->

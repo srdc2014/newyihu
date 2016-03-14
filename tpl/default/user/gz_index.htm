@@ -1,0 +1,340 @@
+<!--{template user/header}-->
+<div class="container">
+  <div class="nav-action">
+    <!--{template user/left_side}-->
+  </div>
+  <!-- nav-action end -->
+  <div class="content-panel">
+    <div class="user-short user-cards">
+      <div class="media media-cards">
+        <div class="user-avatar">
+          <a href="index.php?do=seller&id={$gUid}">
+            <!--{userpic($gUid,'larger')}-->
+          </a>
+        </div>
+        <div class="media-body">
+          <div class="user-info">
+            <div class="top-left top-Leftcards">
+              <h2 class="media-heading username">{$username}</h2>
+              <div class="p-row1 user-position">
+                账号认证： {loop $arrAuthItems $v}
+                <a href="{$v['auth_url']}"><img class="mar0" src="{if $v['auth_pass'] == '1'}{$v['auth_small_ico']}{else}{$v['auth_small_n_ico']}{/if}" width="16px" height="16px" alt="" title="{$v['auth_title']}"></a>
+                {/loop}                  
+                <a href="index.php?do=user&view=account&op=auth" class="user-approve">去认证<i class="fa fa-angle-double-right"></i></a>
+              </div>
+              <div class="p-row1">
+                手机：{if $gUserInfo['mobile']}{$gUserInfo['mobile']}{else}暂无{/if}
+              </div>
+              <div class="p-row1">
+                Q Q：{if $gUserInfo['qq']}{$gUserInfo['qq']}{else}暂无{/if}
+              </div>
+              <div class="p-row1">
+                <div class="wk-userInfo">
+                  邮箱：{if $gUserInfo['email']}{$gUserInfo['email']}{else}暂无{/if}
+                </div>
+                 <a href="index.php?do=user&view=account&op=basic" class="user-link">完善资料<i class="fa fa-angle-double-right"></i></a>
+              </div>
+            </div>
+            <!-- top-left end -->
+            <div class="top-center top-centerCards">
+              <p class="top-centerCards-title">余额</p>
+              <p class="top-centerCards-txt"><strong>{c:$gUserInfo['balance']}</strong></p>
+              <p class="top-centerCards-btn">
+                <a href="index.php?do=user&view=finance&op=withdraw" class="btn btn-default btn-xs">提现</a>
+                <a href="index.php?do=user&view=finance&op=rechargeonline" class="btn btn-default btn-xs">充值</a>
+              </p>
+            </div>
+            <!-- top-center end -->
+            <div class="top-right top-rightCards">
+              <p class="top-rightCards-title">项目提醒</p>
+              <div class="notice notice-cards">
+                <!-- <i class="fa fa-flag"></i> -->
+                <a href="index.php?do=user&view=transaction&op=released&intTaskStatus=0">待付款任务</a>
+                <span class="number">{$intWaitPay[0]['count']}</span>
+              </div>
+              <div class="notice notice-cards">
+                <!-- <i class="fa fa-bookmark"></i> -->
+                <a href="index.php?do=user&view=transaction&op=released&intTaskStatus=3">待选稿</a>
+                <span class="number">{$intChoose[0]['count']}</span>
+              </div>
+              <div class="notice notice-cards">
+                <!-- <i class="fa fa-cubes"></i> -->
+                <a href="index.php?do=user&view=transaction&op=orders&strStatus=wait">待付款商品</a>
+                <span class="number">{$intShopPay[0]['count']}</span>
+              </div>
+              <div class="notice notice-cards">
+                <!-- <i class="fa fa-comment"></i> -->
+                <a href="index.php?do=user&view=gz&op=mark&type=1">待评价</a>
+                <span class="number">{$intMarkG}</span>
+              </div>
+            </div>
+            <!-- top-right end -->
+          </div>
+        </div>
+      </div>
+      <!-- media end -->
+    </div>
+    <!-- user-short end -->
+    <div class="horizontal-row">
+      <div class="user-auth">
+        <div class="type-heading">
+          <h3 class="type-title"><span>最新关注</span><a href="index.php?do=user&view=focus&op=attention">更多</a></h3>
+        </div>
+
+        <div class="userType-list">
+          {if $arrFollowLists}
+          {loop $arrFollowLists $k $v}
+          {if $k < 4}
+          <div class="userType-list-item">
+            <a class="user-itemImg pull-left" href="index.php?do=seller&id=$v['focus_uid']">
+              <!--{userpic($v['focus_uid'],big)}-->              
+            </a>
+            <span class="user-itemInfo pull-right">
+              <p class="user-itemInfo-name">$v['focus_username']</p>
+              <p class="user-item-btn">
+                <span class="label label-success">
+                  <i class="fa fa-check"></i> 已关注
+                </span>
+                <button class="btn btn-default btn-xs"
+            onclick="opCancelFocus('{$strUrl}&action=cancelFocus&intFollowUid={$v[follow_id]}');" type="button" >取消关注
+                </button>
+              </p>
+            </span>
+          </div>
+          {/if}
+          {/loop}
+          {else}
+          <p class="empty-box"><img src="./tpl/default/img/icon-empty.png" class="empty-img">咦，空空如也快去<a href="index.php?do=sellerlist">关注其他人</a>吧</p>
+          {/if}
+        </div>
+      </div>
+
+    </div>
+    <!-- horizontal-row end -->
+
+    <div class="horizontal-row">
+      <div class="user-auth">
+        <div class="type-heading">
+          <h3 class="type-title"><span>我的认证</span><a href="index.php?do=user&view=account&op=auth">更多</a></h3>
+        </div>
+        <div class="user-auth-body">
+          <div class="tab_detail">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                {loop $arrAuthItems $v}
+                <tr>
+                  <td>
+                    <div class="media">
+                      <div class="pull-left">
+                        <img class="media-object" src="{$v['auth_big_ico']}" alt="{if in_array($v['auth_code'],array('realname','enterprise'))}身份认证{else}{$v['auth_title']}{/if}">
+                      </div>
+                      <div class="media-body">
+                        <div class="pull-right">
+                          <span class="label mr_10 {if $arrUserAuthInfo[$v[auth_code]]['auth_status']}label-success{else}label-default
+                                    {/if}">
+                                    {if $arrUserAuthInfo[$v[auth_code]]['auth_status'] =='1'}
+                                      <i class="fa fa-check"></i>已认证
+                                    {else}
+                                      未认证
+                                    {/if}
+                                    </span> {if $arrUserAuthInfo[$v[auth_code]]['auth_status'] =='1'}
+                          <a href="index.php?do={$do}&view=account&op=auth&code={$v[auth_code]}" class="btn btn-default btn-xs">查看认证</a> {else}
+                          <a href="index.php?do={$do}&view=account&op=auth&code={$v[auth_code]}" class="btn btn-default btn-xs">立即认证</a> {/if}
+                        </div>
+                        <strong class="media-heading">
+
+                                  {if in_array($v['auth_code'],array('realname','enterprise'))}身份认证{else}{$v['auth_title']}{/if}
+
+                                </strong>
+                        <p>$v['auth_desc']</p>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                {/loop}
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- horizontal-row end -->
+    <div class="horizontal-row">
+      <div class="user-type">
+        <div class="type-heading">
+          <h3 class="type-title">我的交易记录</h3>
+        </div>
+        <div class="type-list" style="height: 158px;">
+          <table class="table table-hover count1">
+            <thead>
+              <tr>
+                <th>名称</th>
+                <th>金额（元）</th>
+                <th>服务商</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loop $arrRec $k $v}
+              <tr>
+                <td>{if $v['url']!='#'}<a href="{$v['url']}" class="list-desc">{$v['objname']}</a>{else}{$v['objname']}{/if}</td>
+                <td><span class="money">{$v['cash']}</span></td>
+                <td><a href="index.php?do=seller&id={$v['wiki_uid']}">{$v['wiki_username']}</a></td>
+              </tr>
+              {/loop}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- user-type end -->
+      <!-- <div class="user-type">
+      
+          <div class="type-heading">
+            <h3 class="type-title">评价信息</h3>
+          </div>
+          <div class="type-body1">
+            <ul class="count">
+              <li class="item"><span class="num">{$gUserInfo['buyer_credit']}</span>信誉值：</li>
+              <li class="item"><span class="num">{eval echo kekezu::favorableRate($gUserInfo['uid'],2)}<sub>%</sub></span>好评率：</li>
+              <li class="item"><span class="num">{$gUserInfo['pub_num']}</span>发布任务数：</li>
+              <li class="item"><span class="num"><sub></sub>{c:$floatPubTask[0]['cash']}</span>支付任务款：</li>
+              <li class="item"><span class="num">{$floatPayService[0]['count']}</span>购买商品数：</li>
+              <li class="item"><span class="num"><sub></sub>{c:$floatPayService[0]['cash']}</span>支付服务款：</li>
+            </ul>
+          </div>
+      
+      </div> -->
+      <!-- user-type end -->
+      <div class="user-type">
+        <div class="type-heading">
+          <h3 class="type-title">最近动态</h3>
+        </div>
+        <div class="type-body1" style="height: 158px;">
+          <ul class="count">
+            {loop $arr $key $val}
+            <li class="item1"><span class="desc">{$val['dongtai']}</span>
+              <div class="time">
+                <!--{eval echo CommonClass::getStatus($val['time']);}-->
+              </div>
+            </li>
+            {/loop}
+          </ul>
+        </div>
+      </div>
+      <!-- user-type end -->
+    </div>
+    <!-- row end -->
+    <!-- <div class="horizontal-row">
+      <div class="user-type">
+      
+          <div class="type-heading">
+            <h3 class="type-title">我收藏的商品</h3>
+          </div>
+          <div class="type-list">
+      
+          <table class="table table-hover count1">
+            <thead>
+              <tr>
+                <th>名称</th>
+                <th>金额（元）</th>
+                <th>店家</th>
+               <th>状态</th>
+              </tr>
+            </thead>
+            <tbody>
+             {loop $arrFavorite $v}
+              <tr>
+                <td><a href="index.php?do=goods&id={$v['obj_id']}" class="list-desc">$v['obj_name']</a></td>
+                <td><span class="money">{eval  $a=ServiceClass::getShopByObj_id($v['obj_id']);echo $a['price']}</span></td>
+                <td><a href="index.php?do=seller&id={eval  $a=ServiceClass::getShopByObj_id($v['obj_id']);echo $a['uid']}">{eval  $a=ServiceClass::getShopByObj_id($v['obj_id']);echo $a['username']}</a></td>
+              </tr>
+        {/loop}
+            </tbody>
+          </table>
+      
+          </div>
+      
+      </div>
+      user-type end
+    
+      <div class="user-type">
+      
+          <div class="type-heading">
+            <h3 class="type-title">我的交易记录</h3>
+          </div>
+          <div class="type-list">
+            <table class="table table-hover count1">
+            <thead>
+              <tr>
+                <th>名称</th>
+                <th>金额（元）</th>
+                <th>服务商</th>
+              </tr>
+            </thead>
+            <tbody>
+            {loop $arrRec $k $v}
+              <tr>
+                <td>{if $v['url']!='#'}<a href="{$v['url']}" class="list-desc">{$v['objname']}</a>{else}{$v['objname']}{/if}</td>
+                <td><span class="money">{$v['cash']}</span></td>
+                <td><a href="index.php?do=seller&id={$v['wiki_uid']}">{$v['wiki_username']}</a></td>
+              </tr>
+           {/loop}
+            </tbody>
+          </table>
+          </div>
+      
+      </div>
+      user-type end
+    </div> -->
+    <!-- row end -->
+  </div>
+  <!-- content-panel end -->
+</div>
+<!--{template user/footer}-->
+<div class="modal fade identity_modal in" id="identity_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="inner">
+          <div class="alert alert-info"><i class="fa fa-info-circle"></i> 请选择身份</div>
+        </div>
+        <div class="identity_modalContent">
+          <a href="index.php?do=user&view=wk&choose=wk" class="wk-select">
+            <img src="./tpl/default/img/icon-wk.png" class="wk-select-pic" alt="我是威客">
+            <img src="./tpl/default/img/icon-wk01.png" class="wk-select-pic" alt="我是威客">
+            <p>我是威客</p>
+          </a>
+          <a href="index.php?do=user&view=gz&&choose=gz" class="wk-select">
+            <img src="./tpl/default/img/icon-gz.png" class="wk-select-pic" alt="我是雇主">
+            <img src="./tpl/default/img/icon-gz01.png" class="wk-select-pic" alt="我是雇主">
+            <p>我是雇主</p>
+          </a>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    $(function(){
+        var haveIndentity = "{$indentity}";
+        if (haveIndentity) {
+            return false;
+        }
+        //选择身份模态框
+        $('#identity_modal').modal({
+        show:true,
+        backdrop:'static',
+        keyboard: false
+        })
+
+        //隐藏 威客 雇主 选项
+        $(".wk-select").children('.wk-select-pic:nth-child(2)').hide();
+
+        $(".wk-select").hover(function(){
+            $(this).children('.wk-select-pic:nth-child(1)').hide().siblings().show();
+
+        },function(){
+            $(this).children('.wk-select-pic:nth-child(2)').hide().siblings().show();
+        });       
+    });
+</script>

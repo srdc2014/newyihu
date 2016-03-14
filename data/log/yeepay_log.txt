@@ -1,0 +1,2 @@
+
+2016-01-28 13:29:46|orderid[1453958986]|str[Buy1001241051314539589860.01CNYkppwpay1453958986kppwpay1453958986http://develop.kppw.cn/kppw27/include/payment/yeepay/callback.php0charge-user_charge-1-0-1453958986-0-14539589861]|hmac[0e2b322feffb088e3ce1439506558c36]

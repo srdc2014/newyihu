@@ -1,0 +1,75 @@
+
+<!-- 雇主 -->
+<div class="hongb-zujg">
+
+{if !$arrWorkService['WorkWikiTotal']}
+	<div class="no-data">
+暂无威客参与哦！
+	
+	</div>
+
+{else}
+<!--{eval $workChooseCount =0;}-->
+{loop $arrWorkLists $k $v}
+{if $v['work_status']==4||$v['work_status']==5}
+<!--{eval $workChooseCount++}-->
+{/if}
+<div class="list-project">
+	<div class="media"><!-- media start -->
+  		<div class="media-left media-left-img">
+    		<a href="#">
+      		<!--{userpic($v['uid'],'larger')}-->
+    		</a>
+  		</div>
+  		<div class="media-body"><!-- media-body start -->
+  			<div class="body-lf">
+	    		<div class="media-body-name">
+	    			<div class="media-body-title"><i class="glyphicon glyphicon-user"></i>  威客：{$v['username']}</div>
+	    			<div id="tp">
+	    				<!--{eval $arrUserLeve=unserialize($v[seller_level])}-->
+						{$arrUserLeve['pic']}
+	    			</div>
+	    			<div class="hongb-rx">
+	    				
+	    				{if $workChooseCount<$arrConfig['max_num']}
+
+{if $arrProcess_can['work_choose']}
+						
+
+						 {if !in_array($v['work_status'],array('4','5','7','8'))} <a href="javascript:chooseWork('{$v[work_id]}',5);void(0);" class="btn btn-default"> 预选</a> {/if}
+						
+					{/if}
+	    				{/if}
+					
+{if $v['work_status']==5} <a class="btn btn-default" disabled="disabled"> 入选</a>{/if}
+					</div>
+	    		</div>
+				{if !empty($v['attachment'])}
+					<div class="media-body-name media-body-appendix">附件：{loop $v['attachment'] $vfile} <a href="{$vfile['save_name']}" class="manuscript-img-item" rel="manuscript-img-group">{$vfile['file_name']}</a>&nbsp; {/loop}</div>
+				  {/if}
+				  <div class="hongb-text-text">
+
+				  	<!--{eval echo htmlspecialchars_decode($v['work_desc'])}-->
+				  </div>
+	    		<div class="media-body-name media-body-number">
+	    			<ul class="manuscript-meta">
+						<li class="manuscript-meta-item">编号 #{$v['work_id']}</li>
+						<li class="manuscript-meta-item"><!--{date('Y-m-d H:i:s',$v[work_time])}--></li>
+					</ul>
+	    			<div class="icon"><i class="glyphicon glyphicon-star"></i></div>
+	    		</div>
+				<div class="body-lf-right">
+					{if $v['work_status']==4}
+		    		<img src="{SKIN_PATH}/img/hongbf.png" />
+					{/if}
+		    	</div>
+
+    		</div>
+  		</div><!-- media-body end -->
+	</div><!-- media end -->
+
+</div>
+{/loop}
+{/if}
+</div>
+

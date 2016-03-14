@@ -1,0 +1,71 @@
+<div class="release-form release-form-step1 release-body">
+  <form class="form-horizontal" role="form" action="{$strUrl}&step={$step}" method="post"  id="pubTaskForm{$step}" name="pubTaskForm{$step}">
+  	<input type="hidden" name="{$step}" value="{$step}">
+  	<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+    <div class="form-group">
+      <label for="txt_task_cash" class="col-xs-3 control-label control-label-step1 hongbao-label">您的预算</label>
+      <div class="col-xs-6 hongbao-input">
+        <div class="input-group">
+          <span class="input-group-addon">￥</span>
+          <input type="text" class="form-control" id="txt_task_cashs" name="txt_task_cash" placeholder="您的预算" value="{$floatBudget}">
+        </div>
+      </div>
+    </div>
+
+     <div class="form-group-text">
+        <div class="input-group-text">
+          每人抽取的金额随机<br>
+          福袋最少数量为{$arrConfig['min_num']}个，最大金额数量为{$arrConfig['max_num']}个
+        </div>
+    </div>
+
+    <!-- 您的预算 end -->
+
+    <div class="form-group">
+      <label for="txt_task_day" class="col-xs-3 control-label control-label-step1 hongbao-label">结束日期</label>
+      <div class="col-xs-6 hongbao-input">
+        <div class="input-group date form_date ">
+          <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+          <input id="txt_task_day" name="txt_task_day" class="form-control form_datetime" size="16" type="text" value="{$strDate}" placeholder="结束日期:{$strMinDate}" data-date="{$strMinDate}" data-date-format="yyyy-mm-dd">
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+     <label for="txt_task_cash" class="col-xs-3 control-label hongbao-label"></label>
+      <div class="col-xs-6 hongbao-input">
+        <div class="input-group date form_date ">
+     		<span id="dayabc"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 结束日期 end -->
+    <div class="form-group next-step">
+        <button type="submit" class="btn btn-primary next-step_btn" value="1" >下一步</button>
+    </div>
+    <!-- form-group end -->
+  </form>
+</div>
+<script type="text/javascript">
+var id = "{$id}";
+$("#txt_task_cash").blur(function(){
+	  var txt_task_cash = $("#txt_task_cash").val();
+	  $.post("index.php?do=ajax&view=chooseday",{'txt_task_cash':txt_task_cash,"id":id},function(data){
+		  var span_block = $("#txt_task_cash").closest(".input-group").next('span.help-block');
+		  if(span_block.length>0){
+			  span_block.html(data);
+		  }else{
+			  $("#txt_task_cash").closest(".input-group").after('<span class="help-block">'+data+'</span>');
+		  }
+	  })
+	});
+function clicktime(){
+	  var txt_task_cash = $("#txt_task_cash").val();
+	var url = 'index.php?do=lookday&id='+id+'&txt_task_cash='+txt_task_cash;
+	var modal = $.scojs_modal({
+		remote : url,
+		title : '查看日期'
+	});
+	modal.show();
+}
+</script>
